@@ -8,6 +8,7 @@ public class MineFieldTest {
 //        mf.setFieldSize(10);
 //        mf.setPercentMined(10);
 //        mf.setMines();
+        mf.setUpField(10, 10);
         mf.textRepresentation();
         Scanner scanner = new Scanner(System.in);
         String direction;
