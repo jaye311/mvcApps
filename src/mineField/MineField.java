@@ -19,6 +19,7 @@ public class MineField extends Model {
         playerY = 0;
         playerLiving = true;
         playerWinState = false;
+        this.setUpField(fieldSize, percentMined);
     }
 
     public void setUpField(int fieldSize, int percentMined){
