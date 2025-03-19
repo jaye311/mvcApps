@@ -3,6 +3,7 @@ package mineField;
 import mvc.Model;
 import mvc.Utilities;
 
+import java.io.Serializable;
 
 public class MineField extends Model {
     private int fieldSize;
@@ -20,10 +21,15 @@ public class MineField extends Model {
         playerY = 0;
         playerLiving = true;
         playerWinState = false;
-        setMines();
     }
 
-    public void setMines(){
+    public void setUpField(int fieldSize, int percentMined){
+        this.fieldSize = fieldSize;
+        this.percentMined = percentMined;
+        this.field = setMines();
+    }
+
+    public Cell[][] setMines(){
         field = new Cell[fieldSize][fieldSize];
         for(int row = 0; row < field.length; row++){
             for(int col = 0; col < field[row].length; col++){
@@ -67,6 +73,7 @@ public class MineField extends Model {
         }
         //player starts on starting square
         field[0][0].setSteppedOn(true);
+        return field;
     }
 
     public void setPercentMined(int percent){
@@ -76,13 +83,14 @@ public class MineField extends Model {
     //use this method for MoveCommand
     public void move(String direction) {
         if(!playerLiving) {
+            System.err.println("You are dead!");
             Utilities.error("You are dead!");
         }else if(playerWinState) {
             Utilities.inform("You've already won!");
         }else{
             boolean validMove = false;
             if (direction.equals("NE")) {
-                if (playerY > 0 && playerX < fieldSize - 1) {
+                if (playerY > 0 && playerX < fieldSize) {
                     validMove = true;
                     playerY--;
                     playerX++;
@@ -90,7 +98,7 @@ public class MineField extends Model {
                 }
             }
             if (direction.equals("SE")) {
-                if (playerY < fieldSize - 1 && playerX < fieldSize - 1) {
+                if (playerY < fieldSize && playerX < fieldSize) {
                     validMove = true;
                     playerY++;
                     playerX++;
@@ -98,7 +106,7 @@ public class MineField extends Model {
                 }
             }
             if (direction.equals("E")) {
-                if (playerX < fieldSize - 1) {
+                if (playerX < fieldSize) {
                     validMove = true;
                     playerX++;
                     System.out.println("East to: " + playerX + ", " + playerY);
@@ -112,14 +120,14 @@ public class MineField extends Model {
                 }
             }
             if (direction.equals("S")) {
-                if (playerY < fieldSize - 1) {
+                if (playerY < fieldSize) {
                     validMove = true;
                     playerY++;
                     System.out.println("South to: " + playerX + ", " + playerY);
                 }
             }
             if (direction.equals("SW")) {
-                if (playerY < fieldSize - 1 && playerX > 0) {
+                if (playerY < fieldSize && playerX > 0) {
                     validMove = true;
                     playerY++;
                     playerX--;
@@ -147,7 +155,7 @@ public class MineField extends Model {
             //if you step on a mine you lose
             if(field[playerY][playerX].getMine()){
                 playerLiving = false;
-                Utilities.error("You are dead!");
+                System.err.println("You are dead!");
             }
             //reveal hidden cells that were steppedOn
             if(!field[playerY][playerX].isSteppedOn()){
@@ -155,6 +163,7 @@ public class MineField extends Model {
             }
             //Player has reached goal
             if(playerY == fieldSize - 1 && playerX == fieldSize - 1){
+                System.out.println("You win!");
                 Utilities.inform("You win!");
                 playerWinState = true;
             }
@@ -171,12 +180,14 @@ public class MineField extends Model {
     public int getFieldSize(){
         return fieldSize;
     }
-
     public void setFieldSize(int size){
         if(size > 0)
             fieldSize = size;
     }
 
+    public Cell[][] getField() {
+        return field;
+    }
 
     public int getAdjacentMines(int row, int col){
         return field[row][col].getAdjacentMines();
