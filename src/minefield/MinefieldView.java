@@ -4,19 +4,17 @@ import java.awt.*;
 
 public class MinefieldView extends View{
     private static final int CELL_SIZE = 15; // Size of each cell in pixels
-    private static final int fieldSize = 20;
-    private static final int percentMined = 10;
-    private MineField mineField;
+
 
     public MinefieldView(MineField mineField) {
         super(mineField);
         setPreferredSize(new Dimension(mineField.getFieldSize() * CELL_SIZE, mineField.getFieldSize() * CELL_SIZE));
-        this.mineField = mineField;
-        mineField.setUpField(fieldSize, percentMined);
+
     }
 
     public void paintComponent(Graphics gc) {
         super.paintComponent(gc);
+        MineField mineField = (MineField) model;
         int fieldSize = mineField.getFieldSize();
 
         for (int row = 0; row < fieldSize; row++){
