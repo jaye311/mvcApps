@@ -4,6 +4,8 @@ import java.awt.*;
 import javax.swing.*;
 
 import mvc.*;
+import java.awt.*;
+import javax.swing.*;
 
 
 public class MinefieldPanel extends AppPanel {
